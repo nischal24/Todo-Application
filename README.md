@@ -10,12 +10,9 @@ SpeechToText          |      Search Features             |    Swipe Right To Add
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
  <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84934994-d4186280-b0f7-11ea-880a-ae51363d010e.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84935072-ec887d00-b0f7-11ea-8d53-e1737a43b677.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84935123-0033e380-b0f8-11ea-9d1d-a6a1aab20446.gif" width="200" height="360">
 #
-      Undo delete      |        Delete All               |      Filter By Date         |   Filter By Category 
+ Undo delete            |      Delete All             |    Filter By Date        |  Filter By Category 
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
- <img src = "https://user-images.githubusercontent.com/40555520/84935190-15107700-b0f8-11ea-895a-ddd21457c6dd.gif" width="200" height="360"> |   <img src = "" width="200" height="360">        | <img src = "" width="200" height="360">   | <img src = "" width="200" height="360">
-#     Filter By Priority     |             Completed Task            |    Log Out           
-:----------------------------:|:--------------------------------------:|:----------------------
- <img src = "" width="200" height="360"> |   <img src = "" width="200" height="360">        | <img src = "" width="200" height="360">   
+ <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84934994-d4186280-b0f7-11ea-880a-ae51363d010e.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84935072-ec887d00-b0f7-11ea-8d53-e1737a43b677.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84935123-0033e380-b0f8-11ea-9d1d-a6a1aab20446.gif" width="200" height="360">
 
 
 
