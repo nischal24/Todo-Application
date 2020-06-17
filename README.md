@@ -4,7 +4,7 @@
 # Features!
 Sign Up          |  Log In                     | Adding Task              |  Updating Task 
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
-<img src = "https://user-images.githubusercontent.com/40555520/84889271-53864180-b0b8-11ea-9119-30ac84be3eb0.gif" width="200" height="360">  |  <img src = "https://user-images.githubusercontent.com/40555520/84889110-0904c500-b0b8-11ea-966a-2f70672f63b9.gif" width="200" height="360">        |  <img src = "https://user-images.githubusercontent.com/40555520/84934841-99aec580-b0f7-11ea-98a3-30540ef6442a.gif" width="200" height="360">  | <img src = "https://user-images.githubusercontent.com/40555520/84934913-b519d080-b0f7-11ea-841a-2e05b373645b.gif" width="200" height="360">
+<img src = "https://user-images.githubusercontent.com/40555520/84939551-3a07e880-b0fe-11ea-84c2-741c90394449.gif" width="200" height="360">  |  <img src = "https://user-images.githubusercontent.com/40555520/84939437-0d53d100-b0fe-11ea-8c61-b539392b9bf4.gif" width="200" height="360">        |  <img src = "https://user-images.githubusercontent.com/40555520/84934841-99aec580-b0f7-11ea-98a3-30540ef6442a.gif" width="200" height="360">  | <img src = "https://user-images.githubusercontent.com/40555520/84934913-b519d080-b0f7-11ea-841a-2e05b373645b.gif" width="200" height="360">
 #
 SpeechToText          |      Search Features             |    Swipe Right To Add to Task Completed        |  Swipe Left To Delete Task
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
@@ -12,7 +12,7 @@ SpeechToText          |      Search Features             |    Swipe Right To Add
 #
  Undo delete            |      Delete All             |    Filter By Date        |  Filter By Category 
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
- <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84937248-2c9d2f00-b0fb-11ea-83ff-8a34799c25eb.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936201-a16f6980-b0f9-11ea-9822-f0821650aebe.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84936473-ff03b600-b0f9-11ea-87f8-1a95a5b1a3cf.gif" width="200" height="360">
+ <img src = "https://user-images.githubusercontent.com/40555520/84939631-599f1100-b0fe-11ea-960e-184956e600cf.gif" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84937248-2c9d2f00-b0fb-11ea-83ff-8a34799c25eb.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936201-a16f6980-b0f9-11ea-9822-f0821650aebe.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84936473-ff03b600-b0f9-11ea-87f8-1a95a5b1a3cf.gif" width="200" height="360">
 
 #
 Filter By Priority            |      Completed Task        |    Log Out       
