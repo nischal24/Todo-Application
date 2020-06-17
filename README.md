@@ -8,7 +8,7 @@ Sign Up          |  Log In                     | Adding Task              |  Upd
 #
 SpeechToText          |      Search Features             |    Swipe Right To Add to Task Completed        |  Swipe Left To Delete Task
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
- <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84934994-d4186280-b0f7-11ea-880a-ae51363d010e.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84935072-ec887d00-b0f7-11ea-8d53-e1737a43b677.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84935123-0033e380-b0f8-11ea-9d1d-a6a1aab20446.gif" width="200" height="360">
+ <img src = "https://user-images.githubusercontent.com/40555520/84936979-d203d300-b0fa-11ea-828c-e76035c42f8c.gif" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84934994-d4186280-b0f7-11ea-880a-ae51363d010e.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84935072-ec887d00-b0f7-11ea-8d53-e1737a43b677.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84935123-0033e380-b0f8-11ea-9d1d-a6a1aab20446.gif" width="200" height="360">
 #
  Undo delete            |      Delete All             |    Filter By Date        |  Filter By Category 
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
@@ -17,7 +17,7 @@ SpeechToText          |      Search Features             |    Swipe Right To Add
 #
 Filter By Priority            |      Completed Task        |    Log Out       
 :----------------------------:|:--------------------------------------:|:----------------------
- <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84936785-805b4880-b0fa-11ea-8eb3-58327ca87876.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936839-95d07280-b0fa-11ea-8665-dbee5c3121ad.gif" width="200" height="360">   
+ <img src = "https://user-images.githubusercontent.com/40555520/84937095-f9f33680-b0fa-11ea-95f8-6d320a44f9a5.gif" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84936785-805b4880-b0fa-11ea-8eb3-58327ca87876.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936839-95d07280-b0fa-11ea-8665-dbee5c3121ad.gif" width="200" height="360">   
 
 ---
 
