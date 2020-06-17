@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,14 +32,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todo_app.Adapter.TaskAdapter;
 import com.example.todo_app.R;
 import com.example.todo_app.addEditTask.add_edit_task;
+import com.example.todo_app.database.MainViewModel;
 import com.example.todo_app.database.TaskEntry;
 import com.example.todo_app.database.TaskListEntry;
 import com.example.todo_app.database.task_list_view_model_factory;
-import com.example.todo_app.tasks.MainViewModel;
-import com.example.todo_app.tasks.TaskAdapter;
-import com.example.todo_app.tasks.task_list_viewmodel;
+import com.example.todo_app.database.task_list_viewmodel;
 import com.example.todo_app.view.activity.CompletedTask;
 import com.example.todo_app.view.activity.LoginActivity;
 import com.example.todo_app.view.activity.MainActivity;
@@ -63,7 +62,6 @@ public class AllFragment extends Fragment implements TaskAdapter.ItemClickListen
     MainViewModel viewModel;
     task_list_viewmodel taskListViewmodel;
     private ImageButton delete;
-    private Button complete;
     private Spinner spinner;
     private String[] categories = {
             "All",
@@ -121,7 +119,6 @@ public class AllFragment extends Fragment implements TaskAdapter.ItemClickListen
     private void setup(View view) {
         delete = view.findViewById(R.id.deleteImage);
         spinner = view.findViewById(R.id.mainSpinner);
-        complete = view.findViewById(R.id.completeButton);
 
         task_list_view_model_factory factory = new task_list_view_model_factory(getActivity().getApplication());
         taskListViewmodel = ViewModelProviders.of(this, factory).get(task_list_viewmodel.class);
@@ -153,14 +150,6 @@ public class AllFragment extends Fragment implements TaskAdapter.ItemClickListen
             @Override
             public void onClick(View v) {
                 deleteDialogueBox();
-            }
-        });
-
-        //Complete task method called when user clicks complete button
-        complete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickedComplete();
             }
         });
 
@@ -237,27 +226,6 @@ public class AllFragment extends Fragment implements TaskAdapter.ItemClickListen
         setUpViewModel();
     }
 
-    // Called when user clicks complete button removes the task and send them to completed activity
-    private void clickedComplete() {
-        TaskListEntry entry = new TaskListEntry();
-        int checkValue = mAdapter.getCheckValue();
-        List<Integer> selected = mAdapter.getSelectedItems();
-        for (int a : selected) {
-            TaskEntry task = mAdapter.getTask().get(a);
-            if (checkValue == 1) {
-                viewModel.deleteTask(task);
-            }
-            String desc = task.getDescription();
-            String cat = task.getCategory();
-            int prior = task.getPriority();
-            String date = task.getUpdatedAt();
-
-            TaskListEntry taskListEntry = new TaskListEntry(desc, cat, prior, date);
-            taskListViewmodel.insertTaskList(taskListEntry);
-        }
-        selected.clear();
-    }
-
     @Override
     public void onItemClickListener(int itemId) {
         // Launch AddTaskActivity adding the itemId as an extra in the intent
@@ -290,10 +258,8 @@ public class AllFragment extends Fragment implements TaskAdapter.ItemClickListen
                 return true;
             case R.id.logOut:
                 Intent intent1 = new Intent(context, LoginActivity.class);
+                intent1.putExtra("log", false);
                 startActivity(intent1);
-                return true;
-            case R.id.exit:
-                System.exit(0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

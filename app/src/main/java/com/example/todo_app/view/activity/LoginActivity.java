@@ -20,10 +20,12 @@ public class LoginActivity extends AppCompatActivity {
     private EditText username, password;
     private Button login, signup;
     private TextView title;
+    private int a = 1;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Boolean Registered;
+    Boolean log, value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +33,31 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setupView();
         Registered = sharedPreferences.getBoolean("Registered", false);
-
+        log = sharedPreferences.getBoolean("Log", false);
 
         if (!Registered) {
             login.setVisibility(View.GONE);
             signup.setVisibility(View.VISIBLE);
             title.setText("Sign Up");
-
-            // If the user is registered already.
         }
+        Intent intent = getIntent();
+        value = intent.getBooleanExtra("log", true);
+        if (value == false) {
+            editor.putBoolean("Log", false);
+            editor.commit();
+            log = sharedPreferences.getBoolean("Log", false);
+        }
+
+
+        // If the user is registered already.
         if (Registered) {
             login.setVisibility(View.VISIBLE);
             signup.setVisibility(View.GONE);
             title.setText("Log In");
-
+            if (log) {
+                Intent intent1 = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent1);
+            }
         }
 
         //Login method called when user clicks login button
@@ -109,6 +122,8 @@ public class LoginActivity extends AppCompatActivity {
             String uPass = sharedPreferences.getString("password", null);
             if (userName.equals(uName)) {
                 if (pass.equals(uPass)) {
+                    editor.putBoolean("Log", true);
+                    editor.commit();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 } else {

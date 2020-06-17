@@ -1,4 +1,4 @@
-package com.example.todo_app.tasks;
+package com.example.todo_app.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;

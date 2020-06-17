@@ -1,13 +1,10 @@
-package com.example.todo_app.tasks;
+package com.example.todo_app.Adapter;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -17,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.todo_app.R;
+import com.example.todo_app.database.MainViewModel;
 import com.example.todo_app.database.TaskEntry;
 
 import java.util.ArrayList;
@@ -77,41 +75,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         String category = taskEntry.getCategory();
         String description = taskEntry.getDescription();
         int priority = taskEntry.getPriority();
-        //String updatedAt = dateFormat.format(taskEntry.getUpdatedAt());
         String updatedAt = taskEntry.getUpdatedAt();
 
         //Set values
         holder.taskCategoryView.setText(category);
         holder.taskDescriptionView.setText(description);
         holder.updatedAtView.setText(updatedAt);
-
-        if (v == 1) {
-            holder.taskCheckboxView.toggle();
-
-        }
-
-        holder.taskCheckboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    selectedItems.add(position);
-                    v = 1;
-                    if (!holder.taskDescriptionView.getPaint().isStrikeThruText()) {
-                        holder.taskDescriptionView.setPaintFlags(holder.taskDescriptionView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    }
-                } else {
-                    v = 0;
-                    if (selectedItems.isEmpty()) {
-
-                    } else {
-                        selectedItems.remove(position);
-                    }
-                    holder.taskDescriptionView.setPaintFlags(holder.taskDescriptionView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-
-                }
-
-            }
-        });
 
         // Programmatically set the text and color for the priority TextView
         String priorityString = "" + priority; // converts int to String
@@ -220,7 +189,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         TextView taskDescriptionView;
         TextView updatedAtView;
         TextView priorityView;
-        public CheckBox taskCheckboxView;
 
         /**
          * Constructor for the TaskViewHolders.
@@ -233,8 +201,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             taskDescriptionView = itemView.findViewById(R.id.taskDescription);
             updatedAtView = itemView.findViewById(R.id.taskUpdatedAt);
             priorityView = itemView.findViewById(R.id.priorityTextView);
-            taskCheckboxView = itemView.findViewById(R.id.taskCheckbox);
-            taskCheckboxView.setOnCheckedChangeListener(null);
             itemView.setOnClickListener(this);
         }
 

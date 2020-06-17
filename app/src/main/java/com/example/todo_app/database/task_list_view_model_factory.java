@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.todo_app.tasks.task_list_viewmodel;
-
 public class task_list_view_model_factory extends ViewModelProvider.NewInstanceFactory {
     Application application;
 

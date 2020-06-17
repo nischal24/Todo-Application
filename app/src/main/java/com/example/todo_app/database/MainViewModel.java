@@ -1,4 +1,4 @@
-package com.example.todo_app.tasks;
+package com.example.todo_app.database;
 
 import android.app.Application;
 

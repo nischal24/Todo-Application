@@ -19,6 +19,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             >
             <TextView
                 android:id="@+id/categoryLayout"
@@ -30,14 +31,6 @@
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/colorWhite"
                 android:background="@color/colorPrimary"
-                android:padding="5dp"
-                />
-            <CheckBox
-                android:id="@+id/taskCheckbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/categoryLayout"
-                android:layout_marginTop="5dp"
                 android:padding="5dp"
                 />
 

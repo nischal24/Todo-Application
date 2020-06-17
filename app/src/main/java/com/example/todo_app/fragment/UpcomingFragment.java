@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,14 +32,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todo_app.Adapter.TaskAdapter;
 import com.example.todo_app.R;
 import com.example.todo_app.addEditTask.add_edit_task;
+import com.example.todo_app.database.MainViewModel;
 import com.example.todo_app.database.TaskEntry;
 import com.example.todo_app.database.TaskListEntry;
 import com.example.todo_app.database.task_list_view_model_factory;
-import com.example.todo_app.tasks.MainViewModel;
-import com.example.todo_app.tasks.TaskAdapter;
-import com.example.todo_app.tasks.task_list_viewmodel;
+import com.example.todo_app.database.task_list_viewmodel;
 import com.example.todo_app.view.activity.CompletedTask;
 import com.example.todo_app.view.activity.LoginActivity;
 import com.example.todo_app.view.activity.MainActivity;
@@ -65,7 +64,6 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
     private TaskAdapter mAdapter;
     MainViewModel viewModel;
     task_list_viewmodel taskListViewmodel;
-    private Button complete;
     private ImageButton delete;
     private Spinner spinner;
     private String[] categories = {
@@ -124,7 +122,6 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
 
         delete = view.findViewById(R.id.deleteImage);
         spinner = view.findViewById(R.id.mainSpinner);
-        complete = view.findViewById(R.id.completeButton);
 
         task_list_view_model_factory factory = new task_list_view_model_factory(getActivity().getApplication());
         taskListViewmodel = ViewModelProviders.of(this, factory).get(task_list_viewmodel.class);
@@ -159,15 +156,6 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
                 deleteDialogueBox();
             }
         });
-
-        //Complete Task method called when user clicks complete button
-        complete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickedComplete();
-            }
-        });
-
 
        /*
          Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item, or to move them into completed task.
@@ -294,10 +282,8 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
                 return true;
             case R.id.logOut:
                 Intent intent1 = new Intent(context, LoginActivity.class);
+                intent1.putExtra("log", false);
                 startActivity(intent1);
-                return true;
-            case R.id.exit:
-                System.exit(0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -34,8 +34,4 @@
         android:title="Log Out"
         app:showAsAction="never"
         />
-    <item android:id="@+id/exit"
-        android:title="Exit"
-        app:showAsAction="never"/>
-
 </menu>

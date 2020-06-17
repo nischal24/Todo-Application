@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.CompletedTask" />
+        <activity android:name=".view.activity.CompletedTask"
+            android:parentActivityName=".view.activity.MainActivity" />
         <activity
             android:name=".addEditTask.add_edit_task"
             android:parentActivityName=".view.activity.MainActivity" />

@@ -25,11 +25,10 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.todo_app.Adapter.TaskListAdapter;
 import com.example.todo_app.R;
-import com.example.todo_app.database.TaskListDao;
 import com.example.todo_app.database.TaskListEntry;
-import com.example.todo_app.tasks.TaskListAdapter;
-import com.example.todo_app.tasks.task_list_viewmodel;
+import com.example.todo_app.database.task_list_viewmodel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -227,9 +226,8 @@ public class CompletedTask extends AppCompatActivity implements AdapterView.OnIt
                 return true;
             case R.id.logOut:
                 Intent intent1 = new Intent(CompletedTask.this, LoginActivity.class);
+                intent1.putExtra("log", false);
                 startActivity(intent1);
-            case R.id.exit:
-                System.exit(0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
