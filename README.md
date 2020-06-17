@@ -12,7 +12,7 @@ SpeechToText          |      Search Features             |    Swipe Right To Add
 #
  Undo delete            |      Delete All             |    Filter By Date        |  Filter By Category 
 :----------------------------:|:--------------------------------------:|:----------------------:|:-----------------
- <img src = "https://user-images.githubusercontent.com/40555520/84937248-2c9d2f00-b0fb-11ea-83ff-8a34799c25eb.gif" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84934994-d4186280-b0f7-11ea-880a-ae51363d010e.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936201-a16f6980-b0f9-11ea-9822-f0821650aebe.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84936473-ff03b600-b0f9-11ea-87f8-1a95a5b1a3cf.gif" width="200" height="360">
+ <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84937248-2c9d2f00-b0fb-11ea-83ff-8a34799c25eb.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936201-a16f6980-b0f9-11ea-9822-f0821650aebe.gif" width="200" height="360">   | <img src = "https://user-images.githubusercontent.com/40555520/84936473-ff03b600-b0f9-11ea-87f8-1a95a5b1a3cf.gif" width="200" height="360">
 
 #
 Filter By Priority            |      Completed Task        |    Log Out       
