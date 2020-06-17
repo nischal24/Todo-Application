@@ -1,6 +1,7 @@
 package com.example.todo_app.tasks;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.todo_app.R;
 import com.example.todo_app.database.TaskEntry;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>  implements Filterable {
-    // Constant for date format
-    //private static final String DATE_FORMAT = "dd-MM-yyy";
-
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> implements Filterable {
     // Member variable to handle item clicks
     final private ItemClickListener mItemClickListener;
     // Class variables for the List that holds task data and the Context
@@ -35,8 +31,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     private List<TaskEntry> mTaskEntriesAll;
     private List<Integer> selectedItems;
     private Context mContext;
-    // Date formatter
-   // private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+    private int v = 0;
+    private int value = 0;
 
     MainViewModel viewModel;
 
@@ -49,7 +45,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public TaskAdapter(Context context, ItemClickListener listener) {
         mContext = context;
         mItemClickListener = listener;
-        selectedItems=new ArrayList<Integer>();
+        selectedItems = new ArrayList<Integer>();
     }
 
     public List<TaskEntry> getTask() {
@@ -89,18 +85,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.taskDescriptionView.setText(description);
         holder.updatedAtView.setText(updatedAt);
 
+        if (v == 1) {
+            holder.taskCheckboxView.toggle();
+
+        }
 
         holder.taskCheckboxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked)
-        {
-            selectedItems.add(position);
-            ////                    holder.taskCheckboxView.setSelected(false);
+                if (isChecked) {
+                    selectedItems.add(position);
+                    v = 1;
+                    if (!holder.taskDescriptionView.getPaint().isStrikeThruText()) {
+                        holder.taskDescriptionView.setPaintFlags(holder.taskDescriptionView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    }
+                } else {
+                    v = 0;
+                    if (selectedItems.isEmpty()) {
 
-            ////                    holder.taskCheckboxView.toggle();
+                    } else {
+                        selectedItems.remove(position);
+                    }
+                    holder.taskDescriptionView.setPaintFlags(holder.taskDescriptionView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
-        }
+                }
 
             }
         });
@@ -146,9 +154,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public List<TaskEntry> getTasks() {
         return mTaskEntries;
     }
-    public List<Integer> getSelectedItems()
-    {
+
+    public List<Integer> getSelectedItems() {
         return selectedItems;
+    }
+
+    public int getCheckValue() {
+        return v;
     }
 
     /**
@@ -157,21 +169,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
      */
     public void setTasks(List<TaskEntry> taskEntries) {
         mTaskEntries = taskEntries;
-        mTaskEntriesAll = taskEntries;
+        mTaskEntriesAll = new ArrayList<>(taskEntries);
         notifyDataSetChanged();
     }
-
 
     public interface ItemClickListener {
         void onItemClickListener(int itemId);
     }
 
-
     @Override
     public Filter getFilter() {
         return filter;
     }
-    Filter filter=new Filter() {
+
+    //Filter method to filter search data
+    Filter filter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<TaskEntry> filteredList = new ArrayList<>();
@@ -179,7 +191,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 filteredList.addAll(mTaskEntriesAll);
             } else {
                 for (TaskEntry task : mTaskEntriesAll) {
-                    if (task.toString().toLowerCase().contains(charSequence.toString().toLowerCase())) {
+                    if (task.getDescription().toLowerCase().contains(charSequence.toString().toLowerCase())) {
                         filteredList.add(task);
                     }
                 }
@@ -191,9 +203,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            mTaskEntriesAll.clear();
-            mTaskEntriesAll.addAll((Collection<? extends TaskEntry>) results.values);
-            notifyDataSetChanged();
+
+            if (results.values == null) {
+            } else {
+                mTaskEntries.clear();
+                mTaskEntries.addAll((Collection<? extends TaskEntry>) results.values);
+                notifyDataSetChanged();
+            }
         }
     };
 
@@ -204,7 +220,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         TextView taskDescriptionView;
         TextView updatedAtView;
         TextView priorityView;
-       public CheckBox taskCheckboxView;
+        public CheckBox taskCheckboxView;
 
         /**
          * Constructor for the TaskViewHolders.
@@ -213,19 +229,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
          */
         public TaskViewHolder(View itemView) {
             super(itemView);
-            taskCategoryView=itemView.findViewById(R.id.categoryLayout);
+            taskCategoryView = itemView.findViewById(R.id.categoryLayout);
             taskDescriptionView = itemView.findViewById(R.id.taskDescription);
             updatedAtView = itemView.findViewById(R.id.taskUpdatedAt);
             priorityView = itemView.findViewById(R.id.priorityTextView);
-            taskCheckboxView =itemView.findViewById(R.id.taskCheckbox);
+            taskCheckboxView = itemView.findViewById(R.id.taskCheckbox);
             taskCheckboxView.setOnCheckedChangeListener(null);
             itemView.setOnClickListener(this);
         }
+
         @Override
         public void onClick(View view) {
             int elementId = mTaskEntries.get(getAdapterPosition()).getId();
-            if (mItemClickListener !=null || elementId != RecyclerView.NO_POSITION)
-            {
+            if (mItemClickListener != null || elementId != RecyclerView.NO_POSITION) {
                 mItemClickListener.onItemClickListener(elementId);
             }
         }

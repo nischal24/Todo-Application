@@ -13,7 +13,7 @@ import com.example.todo_app.fragment.TodayFragment;
 import com.example.todo_app.fragment.UpcomingFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +22,11 @@ public class MainActivity extends AppCompatActivity{
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-        //I added this if statement to keep the selected fragment when rotating the device
+
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new AllFragment(MainActivity.this)).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container,
+                            new AllFragment(MainActivity.this)).commit();
         }
     }
 

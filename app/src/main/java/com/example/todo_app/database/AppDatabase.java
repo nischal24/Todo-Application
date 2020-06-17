@@ -10,7 +10,8 @@ import androidx.room.TypeConverters;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-@Database(entities = {TaskEntry.class}, version = 1, exportSchema = false)
+
+@Database(entities = {TaskEntry.class, TaskListEntry.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
@@ -19,7 +20,7 @@ public abstract class AppDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(1);
 
-    private static AppDatabase sInstance;
+    private static AppDatabase sInstance = null;
 
     public static AppDatabase getInstance(Context context) {
         if (sInstance == null) {
@@ -37,6 +38,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract TaskDao taskDao();
 
-
+    public abstract TaskListDao taskListDao();
 }
 

@@ -9,24 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.CompletedTask"></activity>
-        <activity android:name=".Activity.SignupActivity" />
-        <activity android:name=".Activity.LoginActivity">
-
-        </activity>
-        <activity
-            android:name=".addEditTask.add_edit_task"
-            android:parentActivityName=".view.activity.MainActivity" />
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:launchMode="singleTop">
-
+        <activity android:name=".view.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+        </activity>
+        <activity android:name=".view.activity.CompletedTask" />
+        <activity
+            android:name=".addEditTask.add_edit_task"
+            android:parentActivityName=".view.activity.MainActivity" />
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTop">
 
         </activity>
     </application>

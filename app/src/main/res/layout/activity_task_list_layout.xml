@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.activity.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewColor"
@@ -19,6 +18,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             >
             <TextView
                 android:id="@+id/categoryLayout"
@@ -32,15 +32,6 @@
                 android:background="@color/colorPrimary"
                 android:padding="5dp"
                 />
-            <CheckBox
-                android:id="@+id/taskCheckbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/categoryLayout"
-                android:layout_marginTop="5dp"
-                android:padding="5dp"
-                />
-
             <!-- TextView that displays the description -->
             <TextView
                 android:id="@+id/taskDescription"
@@ -67,7 +58,6 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                android:layout_toRightOf="@+id/taskCheckbox"
                 android:padding="5dp"
                 android:textColor="@color/colorWhite"
                 android:textSize="12dp"
@@ -90,4 +80,5 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
 </RelativeLayout>

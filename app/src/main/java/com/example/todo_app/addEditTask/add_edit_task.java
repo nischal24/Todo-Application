@@ -1,10 +1,5 @@
 package com.example.todo_app.addEditTask;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,21 +14,21 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.todo_app.R;
 import com.example.todo_app.database.TaskEntry;
-//import com.example.todo_app.add_edit_task_viewmodel;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
-public class add_edit_task extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class add_edit_task extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     // Extra for the task ID to be received in the intent
     public static final String EXTRA_TASK_ID = "extraTaskId";
@@ -53,7 +48,7 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
     EditText mEditText;
     RadioGroup mRadioGroup;
     Button mButton;
-    ImageButton micButton,calenderButton;
+    ImageButton micButton, calenderButton;
     EditText dateEditText;
     Spinner spinner;
     private String[] categories = {
@@ -64,11 +59,7 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
             "Other"
     };
     public ArrayList<String> spinnerList = new ArrayList<>(Arrays.asList(categories));
-
-
     private int mTaskId = DEFAULT_TASK_ID;
-
-
     add_edit_task_viewmodel viewModel;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +79,6 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
 
             if (mTaskId == DEFAULT_TASK_ID) {
                 // populate the UI
-
                 mTaskId = intent.getIntExtra(EXTRA_TASK_ID, DEFAULT_TASK_ID);
                 add_edit_task_viemodel_factory factory = new add_edit_task_viemodel_factory(getApplication(), mTaskId);
                 viewModel = ViewModelProviders.of(this, factory).get(add_edit_task_viewmodel.class);
@@ -101,7 +91,7 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
                     }
                 });
             }
-        }else{
+        } else {
             add_edit_task_viemodel_factory factory = new add_edit_task_viemodel_factory(getApplication(), mTaskId);
             viewModel = ViewModelProviders.of(this, factory).get(add_edit_task_viewmodel.class);
         }
@@ -113,16 +103,16 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
      * @param task the taskEntry to populate the UI
      */
     private void populateUI(TaskEntry task) {
-        if(task == null){
+        if (task == null) {
             return;
         }
         mEditText.setText(task.getDescription());
         setPriorityInViews(task.getPriority());
         spinner.setSelection(spinnerList.indexOf(task.getCategory()));
 
-        SimpleDateFormat format = new SimpleDateFormat( "yyyy/MM/dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         String date = new String();
-        date=task.getUpdatedAt();
+        date = task.getUpdatedAt();
         dateEditText.setText(date);
     }
 
@@ -131,11 +121,11 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
      */
     private void initViews() {
         mEditText = findViewById(R.id.editTextTaskDescription);
-        dateEditText=findViewById(R.id.editDate);
+        dateEditText = findViewById(R.id.editDate);
         mRadioGroup = findViewById(R.id.radioGroup);
-        spinner=findViewById(R.id.spinner);
-        micButton=findViewById(R.id.micButton);
-        calenderButton=findViewById(R.id.calenderButton);
+        spinner = findViewById(R.id.spinner);
+        micButton = findViewById(R.id.micButton);
+        calenderButton = findViewById(R.id.calenderButton);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -171,16 +161,15 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
         });
     }
 
+    //Speech to Text method
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode)
-        {
-            case REQUEST_CODE_SPEECH_INPUT:{
-                if (resultCode==RESULT_OK && null!=data)
-                {
+        switch (requestCode) {
+            case REQUEST_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
                     //get text array from voice intent
-                    ArrayList<String> result=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     //set to text view
                     mEditText.setText(result.get(0));
                 }
@@ -190,25 +179,23 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
     }
 
     private void talk() {
-        Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Speak Something");
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Something");
         //Start intent
-        try{
+        try {
             //if there is no error show dialog
-            startActivityForResult(intent,REQUEST_CODE_SPEECH_INPUT);
-        }
-        catch (Exception e)
-        {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (Exception e) {
             //if there is some error catch error and show
-            Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void showDatePickerDialog()
-    {
-        DatePickerDialog datePickerDialog=new DatePickerDialog(
+    //Date picker
+    public void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
                 this,
                 Calendar.getInstance().get(Calendar.YEAR),
@@ -218,6 +205,7 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(INSTANCE_TASK_ID, mTaskId);
@@ -268,24 +256,19 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
     public void onSaveButtonClicked() {
         // Not yet implemented
         String description = mEditText.getText().toString();
-        String category= spinner.getSelectedItem().toString();
-        String sDate=dateEditText.getText().toString();
+        String category = spinner.getSelectedItem().toString();
+        String sDate = dateEditText.getText().toString();
         int priority = getPriorityFromViews();
 
-        if(description.trim().isEmpty())
-        {
-            Toast.makeText(this," Description is Missing",Toast.LENGTH_SHORT).show();
-        }
-        else if (sDate.isEmpty())
-        {
-            Toast.makeText(this," Date is Missing",Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            TaskEntry todo = new TaskEntry(description, priority, sDate,category);
-            if(mTaskId == DEFAULT_TASK_ID)
+        if (description.trim().isEmpty()) {
+            Toast.makeText(this, " Description is Missing", Toast.LENGTH_SHORT).show();
+        } else if (sDate.isEmpty()) {
+            Toast.makeText(this, " Date is Missing", Toast.LENGTH_SHORT).show();
+        } else {
+            TaskEntry todo = new TaskEntry(description, priority, sDate, category);
+            if (mTaskId == DEFAULT_TASK_ID)
                 viewModel.insertTask(todo);
-            else{
+            else {
                 todo.setId(mTaskId);
                 viewModel.updateTask(todo);
             }
@@ -295,15 +278,7 @@ public class add_edit_task extends AppCompatActivity implements DatePickerDialog
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        Calendar c=Calendar.getInstance();
-//        c.set(Calendar.YEAR,year);
-//        c.set(Calendar.MONTH,month);
-//        c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-//
-//        String currentDateString= DateFormat.getDateInstance().format(c.getTime());
-
-        String currentDate=dayOfMonth+"-"+"0"+(month+1)+"-"+year;
-
+        String currentDate = dayOfMonth + "-" + "0" + (month + 1) + "-" + year;
         dateEditText.setText(currentDate);
     }
 }

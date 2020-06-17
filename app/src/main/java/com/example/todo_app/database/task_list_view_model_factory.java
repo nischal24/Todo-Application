@@ -1,22 +1,23 @@
-package com.example.todo_app.addEditTask;
+package com.example.todo_app.database;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-public class add_edit_task_viemodel_factory extends ViewModelProvider.NewInstanceFactory {
-    Application application;
-    int taskId;
 
-    public add_edit_task_viemodel_factory(Application application, int taskId) {
+import com.example.todo_app.tasks.task_list_viewmodel;
+
+public class task_list_view_model_factory extends ViewModelProvider.NewInstanceFactory {
+    Application application;
+
+    public task_list_view_model_factory(Application application) {
         this.application = application;
-        this.taskId = taskId;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new add_edit_task_viewmodel(application, taskId);
+        return (T) new task_list_viewmodel(application);
     }
 }

@@ -8,7 +8,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -35,8 +34,20 @@ public interface TaskDao {
     @Query("select * from task WHERE updated_at = :date")
     LiveData<List<TaskEntry>> getTasksByDate(String date);
 
+    @Query("select * from task WHERE category = :category and updated_at = :date")
+    LiveData<List<TaskEntry>> getTasksByCategoryByTodayDate(String category, String date);
+
+    @Query("select * from task WHERE priority = :p and updated_at = :date")
+    LiveData<List<TaskEntry>> getTasksByPriorityByTodayDate(int p, String date);
+
     @Query("select * from task WHERE updated_at != :date")
     LiveData<List<TaskEntry>> getTasksByDateNot(String date);
+
+    @Query("select * from task WHERE category = :category and updated_at != :date")
+    LiveData<List<TaskEntry>> getTasksByCategoryByUpcomingDate(String category, String date);
+
+    @Query("select * from task WHERE priority = :p and updated_at != :date")
+    LiveData<List<TaskEntry>> getTasksByPriorityByUpcomingDate(int p, String date);
 
     @Query("select * from task where priority =:p")
     LiveData<List<TaskEntry>> getHighPriority(int p);

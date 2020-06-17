@@ -3,6 +3,7 @@ package com.example.todo_app.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -30,13 +33,19 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todo_app.view.activity.MainActivity;
 import com.example.todo_app.R;
 import com.example.todo_app.addEditTask.add_edit_task;
 import com.example.todo_app.database.TaskEntry;
+import com.example.todo_app.database.TaskListEntry;
+import com.example.todo_app.database.task_list_view_model_factory;
 import com.example.todo_app.tasks.MainViewModel;
 import com.example.todo_app.tasks.TaskAdapter;
+import com.example.todo_app.tasks.task_list_viewmodel;
+import com.example.todo_app.view.activity.CompletedTask;
+import com.example.todo_app.view.activity.LoginActivity;
+import com.example.todo_app.view.activity.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,6 +55,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
 public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickListener, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -53,6 +64,7 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
     private RecyclerView mRecyclerView;
     private TaskAdapter mAdapter;
     MainViewModel viewModel;
+    task_list_viewmodel taskListViewmodel;
     private Button complete;
     private ImageButton delete;
     private Spinner spinner;
@@ -64,6 +76,7 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
             "Work",
             "Other"
     };
+
     Context context;
     ArrayList<String> spinnerList = new ArrayList<>(Arrays.asList(categories));
 
@@ -75,7 +88,7 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_upcoming,null);
+        View view = inflater.inflate(R.layout.fragment_upcoming, null);
         setup(view);
         return view;
     }
@@ -85,18 +98,36 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
+
     //Menu
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.todo_menu,menu);
+        inflater.inflate(R.menu.todo_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
     }
+
     private void setup(View view) {
 
-        delete=view.findViewById(R.id.deleteImage);
-        spinner=view.findViewById(R.id.mainSpinner);
-        complete=view.findViewById(R.id.completeButton);
+        delete = view.findViewById(R.id.deleteImage);
+        spinner = view.findViewById(R.id.mainSpinner);
+        complete = view.findViewById(R.id.completeButton);
 
+        task_list_view_model_factory factory = new task_list_view_model_factory(getActivity().getApplication());
+        taskListViewmodel = ViewModelProviders.of(this, factory).get(task_list_viewmodel.class);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, spinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -114,12 +145,14 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Initialize the adapter and attach it to the RecyclerView
-        mAdapter = new TaskAdapter(context,this);
+        mAdapter = new TaskAdapter(context, this);
         mRecyclerView.setAdapter(mAdapter);
 
+        //Item decoration for recyclerview
         DividerItemDecoration decoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
         mRecyclerView.addItemDecoration(decoration);
 
+        //Delete method called when user clicks delete button
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +160,7 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
             }
         });
 
+        //Complete Task method called when user clicks complete button
         complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,8 +169,8 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
         });
 
 
-          /*
-         Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item.
+       /*
+         Add a touch helper to the RecyclerView to recognize when a user swipes to delete an item, or to move them into completed task.
          An ItemTouchHelper enables touch behavior (like swipe and move) on each ViewHolder,
          and uses callbacks to signal when a user is performing these actions.
          */
@@ -150,9 +184,44 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
             @Override
             public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 // Here is where you'll implement swipe to delete
-                int position=viewHolder.getAdapterPosition();
-                TaskEntry task=mAdapter.getTask().get(position);
-                viewModel.deleteTask(task);
+                int position = viewHolder.getAdapterPosition();
+                final TaskEntry task = mAdapter.getTask().get(position);
+                switch (swipeDir) {
+                    //delete files when user swipes left
+                    case ItemTouchHelper.LEFT:
+                        String deletedFile = task.getDescription();
+                        viewModel.deleteTask(task);
+                        Snackbar.make(mRecyclerView, deletedFile, Snackbar.LENGTH_LONG).setAction("Undo Delete", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                viewModel.insertTask(task);
+                            }
+                        }).show();
+                        break;
+                    // move files to completed when user swipes right
+                    case ItemTouchHelper.RIGHT:
+                        viewModel.deleteTask(task);
+                        String desc = task.getDescription();
+                        String cat = task.getCategory();
+                        int prior = task.getPriority();
+                        String date = task.getUpdatedAt();
+                        final TaskListEntry taskListEntry = new TaskListEntry(desc, cat, prior, date);
+                        taskListViewmodel.insertTaskList(taskListEntry);
+                        break;
+                }
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(context, R.color.materialRed))
+                        .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_sweep)
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(context, R.color.materialGreen))
+                        .addSwipeRightActionIcon(R.drawable.ic_baseline_check_24)
+                        .create()
+                        .decorate();
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }).attachToRecyclerView(mRecyclerView);
 
@@ -175,71 +244,68 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
     @Override
     public void onItemClickListener(int itemId) {
         // Launch AddTaskActivity adding the itemId as an extra in the intent
-        Intent intent=new Intent(context, add_edit_task.class);
-        intent.putExtra(add_edit_task.EXTRA_TASK_ID,itemId);
+        Intent intent = new Intent(context, add_edit_task.class);
+        intent.putExtra(add_edit_task.EXTRA_TASK_ID, itemId);
         startActivity(intent);
     }
 
-
+    // Called when user clicks complete button removes the task and send them to completed activity
     private void clickedComplete() {
-        List<Integer> selected=mAdapter.getSelectedItems();
-        for(int a:selected)
-        {
-            TaskEntry task=mAdapter.getTask().get(a);
-            viewModel.deleteTask(task);
+        TaskListEntry entry = new TaskListEntry();
+        int checkValue = mAdapter.getCheckValue();
+        List<Integer> selected = mAdapter.getSelectedItems();
+        for (int a : selected) {
+            TaskEntry task = mAdapter.getTask().get(a);
+            if (checkValue == 1) {
+                viewModel.deleteTask(task);
+            }
+            String desc = task.getDescription();
+            String cat = task.getCategory();
+            int prior = task.getPriority();
+            String date = task.getUpdatedAt();
 
-            String desc=task.getDescription();
-            String cat=task.getCategory();
-            int prior=task.getPriority();
-//            Date date=task.getUpdatedAt();
-
-//            TaskListEntry taskListEntry=new TaskListEntry(desc,cat,prior,date);
-            //          task_list_viewmodel.insertTaskList(taskListEntry);
-
-            Toast.makeText(context,"pos"+desc,Toast.LENGTH_SHORT).show();
-
-
+            TaskListEntry taskListEntry = new TaskListEntry(desc, cat, prior, date);
+            taskListViewmodel.insertTaskList(taskListEntry);
         }
         selected.clear();
-
     }
 
+    //Menu Options selected method
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.down:
-                Toast.makeText(context,"down",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.allPriority:
-                Toast.makeText(context,"all priority",Toast.LENGTH_SHORT).show();
                 setUpViewModel();
                 return true;
             case R.id.highPriority:
-                Toast.makeText(context,"high priority",Toast.LENGTH_SHORT).show();
                 getPriorityList(1);
                 return true;
             case R.id.mediumPriority:
-                Toast.makeText(context,"medium priority",Toast.LENGTH_SHORT).show();
                 getPriorityList(2);
                 return true;
             case R.id.lowPriority:
-                Toast.makeText(context,"low priority",Toast.LENGTH_SHORT).show();
                 getPriorityList(3);
                 return true;
             case R.id.completedTask:
-                Toast.makeText(context,"priority",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, CompletedTask.class);
+                startActivity(intent);
+                return true;
+            case R.id.logOut:
+                Intent intent1 = new Intent(context, LoginActivity.class);
+                startActivity(intent1);
                 return true;
             case R.id.exit:
-                Toast.makeText(context,"exit",Toast.LENGTH_SHORT).show();
+                System.exit(0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-    //
-    private void setUpViewModel() {
 
+    //method to call specific data from database and send to adapter
+    private void setUpViewModel() {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String strDate = dateFormat.format(date);
@@ -248,13 +314,14 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
         viewModel.getTasksByDateNot(strDate).observe((LifecycleOwner) context, new Observer<List<TaskEntry>>() {
             @Override
             public void onChanged(List<TaskEntry> taskEntries) {
-                Log.d(TAG,"Updating list of tasks from LiveData in ViewModel");
+                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
                 mAdapter.setTasks(taskEntries);
             }
         });
     }
-    public void deleteDialogueBox()
-    {
+
+    //method for delete dialogue box
+    public void deleteDialogueBox() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setMessage("Are you sure, You wanted to make decision");
         alertDialogBuilder.setPositiveButton("yes",
@@ -262,11 +329,11 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         viewModel.deleteAllTasks();
-                        Toast.makeText(context,"All Task has been deleted",Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "All Task has been deleted", Toast.LENGTH_LONG).show();
                     }
                 });
 
-        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -276,48 +343,52 @@ public class UpcomingFragment extends Fragment implements TaskAdapter.ItemClickL
         alertDialog.show();
     }
 
-    //Spinner
+    //method for Spinner item selection
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (position == 0) {
             setUpViewModel();
         } else {
             String value = parent.getItemAtPosition(position).toString();
-            Toast.makeText(context,"item selected"+value,Toast.LENGTH_LONG).show();
             loadFiltered(value);
         }
 
     }
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
 
-    private void loadFiltered(String value)
-    {
+    private void loadFiltered(String value) {
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        if(value=="All")
-        {
+        if (value == "All") {
             setUpViewModel();
-        }
-        else
-        {
-            viewModel.getByCategory(value).observe(this, new Observer<List<TaskEntry>>() {
+        } else {
+            Date date = Calendar.getInstance().getTime();
+            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            String strDate = dateFormat.format(date);
+
+            viewModel.getTasksByCategoryByUpcomingDate(value, strDate).observe(this, new Observer<List<TaskEntry>>() {
                 @Override
                 public void onChanged(List<TaskEntry> taskEntries) {
-                    Log.d(TAG,"Updating list of tasks from LiveData in ViewModel");
+                    Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
                     mAdapter.setTasks(taskEntries);
                 }
             });
         }
     }
-    private void getPriorityList(int value)
-    {
+
+    //method displays according to priority selected
+    private void getPriorityList(int value) {
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String strDate = dateFormat.format(date);
         viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getPriority(value).observe(this, new Observer<List<TaskEntry>>() {
+        viewModel.getTasksByPriorityByUpcomingDate(value, strDate).observe(this, new Observer<List<TaskEntry>>() {
             @Override
             public void onChanged(List<TaskEntry> taskEntries) {
-                Log.d(TAG,"Updating list of tasks from LiveData in ViewModel");
+                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
                 mAdapter.setTasks(taskEntries);
             }
         });

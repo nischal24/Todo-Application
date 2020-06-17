@@ -30,6 +30,10 @@
     <item android:id="@+id/completedTask"
         android:title="Completed Task"
         app:showAsAction="never"/>
+    <item android:id="@+id/logOut"
+        android:title="Log Out"
+        app:showAsAction="never"
+        />
     <item android:id="@+id/exit"
         android:title="Exit"
         app:showAsAction="never"/>
