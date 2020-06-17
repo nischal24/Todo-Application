@@ -17,7 +17,7 @@ SpeechToText          |      Search Features             |    Swipe Right To Add
 #
 Filter By Priority            |      Completed Task        |    Log Out       
 :----------------------------:|:--------------------------------------:|:----------------------
- <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84934994-d4186280-b0f7-11ea-880a-ae51363d010e.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936201-a16f6980-b0f9-11ea-9822-f0821650aebe.gif" width="200" height="360">   
+ <img src = "" width="200" height="360"> |   <img src = "https://user-images.githubusercontent.com/40555520/84936785-805b4880-b0fa-11ea-8eb3-58327ca87876.gif" width="200" height="360">        | <img src = "https://user-images.githubusercontent.com/40555520/84936839-95d07280-b0fa-11ea-8665-dbee5c3121ad.gif" width="200" height="360">   
 
 ---
 
