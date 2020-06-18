@@ -95,8 +95,3 @@ dependecies
 
 
 
-<<<<<<< HEAD
-	
-=======
-	
->>>>>>> 34ba1707c0c6a02d4fd251ad6af36b7ad2b43cf6
